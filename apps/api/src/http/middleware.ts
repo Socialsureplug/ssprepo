@@ -91,7 +91,9 @@ function sessionAuth(kind: 'merchant' | 'staff', opts: { requireOrg?: boolean } 
     if (!ctx) return next(Errors.unauthorized('Your session has expired. Please sign in again.'));
     if (!SAFE_METHODS.has(req.method)) {
       const origin = req.get('origin');
-      if (origin && origin !== allowedOrigin) return next(Errors.forbidden('Cross-origin request blocked.'));
+      // Strict Origin pinning in production; in development the app may be reached through
+      // preview proxies on other hostnames, and the CSRF token below still protects every request.
+      if (config.isProd && origin && origin !== allowedOrigin) return next(Errors.forbidden('Cross-origin request blocked.'));
       const csrf = req.get('x-csrf-token') ?? '';
       if (!safeEqual(csrf, ctx.csrfToken)) return next(new AppError('csrf_invalid', 'Security token missing or invalid. Refresh the page and try again.', 403));
     }
