@@ -1,0 +1,63 @@
+/*
+ * Design system tokens. Tailwind v4 reads @theme to generate utilities (bg-primary, text-ink, font-serif …).
+ * White dominates; blue is reserved for actions, active states, links and data.
+ */
+@import '@fontsource/instrument-serif/400.css';
+@import '@fontsource/instrument-serif/400-italic.css';
+@import '@fontsource-variable/bricolage-grotesque';
+
+@theme {
+  --font-sans: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, 'Times New Roman', serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'JetBrains Mono', Menlo, monospace;
+
+  --color-ink: #0a1020;
+  --color-ink-2: #2b3445;
+  --color-muted: #5d6677;
+  --color-subtle: #8a92a1;
+  --color-line: #e5e8ee;
+  --color-line-strong: #cfd5df;
+  --color-surface: #f7f8fa;
+  --color-surface-2: #f1f3f6;
+
+  --color-primary: #1546e0;
+  --color-primary-hover: #0f38bd;
+  --color-primary-soft: #eef2ff;
+  --color-primary-ink: #0b2a8f;
+
+  --color-success: #0b7a4b;
+  --color-success-soft: #e8f6ef;
+  --color-warning: #a35a00;
+  --color-warning-soft: #fdf3e3;
+  --color-danger: #c42b1c;
+  --color-danger-soft: #fdecea;
+  --color-neutral-soft: #f0f2f5;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  --shadow-card: 0 1px 2px rgba(10, 16, 32, 0.04), 0 1px 1px rgba(10, 16, 32, 0.02);
+  --shadow-pop: 0 12px 32px -8px rgba(10, 16, 32, 0.18), 0 2px 6px rgba(10, 16, 32, 0.06);
+
+  --animate-fade-in: fade-in 160ms ease-out;
+  --animate-slide-up: slide-up 180ms ease-out;
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slide-up { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+}
+
+@layer base {
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+  body { background: #ffffff; color: var(--color-ink); font-family: var(--font-sans); font-feature-settings: 'ss01', 'tnum' 0; }
+  ::selection { background: var(--color-primary-soft); color: var(--color-primary-ink); }
+  :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+  input, select, textarea, button { font: inherit; }
+}
+
+@utility tabular { font-variant-numeric: tabular-nums; }
+@utility display { font-family: var(--font-serif); font-weight: 400; letter-spacing: -0.015em; line-height: 1.02; }
+@utility eyebrow { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
