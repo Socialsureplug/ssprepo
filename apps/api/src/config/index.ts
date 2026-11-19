@@ -1,4 +1,20 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
+
+// Load apps/api/.env when present (values already set in the real environment win).
+// Tests never read it so they can't accidentally touch a dev database.
+const envFile = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../.env');
+if (process.env.NODE_ENV !== 'test' && fs.existsSync(envFile)) {
+  for (const line of fs.readFileSync(envFile, 'utf8').split(/\r?\n/)) {
+    const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*(#.*)?$/);
+    if (!m || process.env[m[1]] !== undefined) continue;
+    process.env[m[1]] = m[2].replace(/^(['"])(.*)\1$/, '$2');
+  }
+}
+// Treat empty values ("KEY=") as unset so defaults apply.
+for (const [k, v] of Object.entries(process.env)) if (v === '') delete process.env[k];
 
 /**
  * Centralized, validated configuration. All secrets come from environment variables;

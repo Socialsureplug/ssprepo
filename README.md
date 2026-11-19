@@ -26,27 +26,18 @@ packages/
 
 ## Quick start
 
-Requirements: Node 20+, PostgreSQL 14+.
+Requirements: Node 20.12+ and PostgreSQL 14+ (or Docker to run PostgreSQL for you).
 
-```bash
-npm install
-```
-
-```bash
-docker compose up -d postgres   # or use a local PostgreSQL with user/password app/app
-```
-
-```bash
-cp .env.example apps/api/.env   # dev defaults work without editing; production requires real secrets
-```
-
-```bash
-SEED_ADMIN_PASSWORD='AdminPass1234' SEED_MERCHANT_PASSWORD='DemoPass1234' npm run db:seed
-```
-
-```bash
-npm run dev   # API :4000 (with in-process worker), web :5173, admin :5174
-```
+1. Install dependencies: `npm install`
+2. Start PostgreSQL. With Docker: `docker compose up -d postgres`. Without Docker, create a
+   user `app` (password `app`) and a database `payments_dev` owned by it, or put your own
+   `DATABASE_URL` in `apps/api/.env`.
+3. Copy the env template: `cp .env.example apps/api/.env` (Windows: `copy .env.example apps\api\.env`).
+   Blank values fall back to safe development defaults. Optionally set `SEED_ADMIN_PASSWORD` and
+   `SEED_MERCHANT_PASSWORD`; otherwise random passwords are printed by the next step.
+4. Create tables and demo accounts: `npm run setup`
+5. Start everything: `npm run dev` — API on :4000 (with the background worker), web on :5173,
+   admin on :5174. Works on macOS, Linux and Windows.
 
 - Merchant dashboard: http://localhost:5173 — `demo@example.com` / the merchant seed password
 - Admin: http://localhost:5174 — `admin@example.com` / the admin seed password
