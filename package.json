@@ -18,7 +18,9 @@
     "build": "npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspace @app/api",
-    "setup": "npm run db:seed"
+    "setup": "npm run db:seed",
+    "render:build": "npm ci --include=dev && npm run build -w @app/web && ADMIN_BASE=/admin/ npm run build -w @app/admin",
+    "render:start": "npm run bootstrap -w @app/api && SERVE_STATIC=true npm run start -w @app/api"
   },
   "engines": {
     "node": ">=20"

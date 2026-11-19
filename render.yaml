@@ -1,0 +1,32 @@
+# Render Blueprint: one web service (API + merchant app + admin app on one origin) and Postgres.
+# Secrets marked generateValue are created by Render; sync:false values are entered at deploy time.
+services:
+  - type: web
+    name: nairaflow
+    runtime: node
+    plan: free
+    buildCommand: npm run render:build
+    startCommand: npm run render:start
+    healthCheckPath: /api/health
+    envVars:
+      - { key: NODE_ENV, value: production }
+      - { key: NODE_VERSION, value: "22" }
+      - { key: SERVE_STATIC, value: "true" }
+      - { key: RUN_WORKER, value: "true" }
+      - { key: TRUST_PROXY, value: "1" }
+      - { key: DATABASE_URL, fromDatabase: { name: nairaflow-db, property: connectionString } }
+      - { key: ENCRYPTION_KEY, generateValue: true }
+      - { key: HASH_PEPPER, generateValue: true }
+      - { key: SANDBOX_WEBHOOK_SECRET, generateValue: true }
+      - { key: WEB_URL, sync: false }        # https://<service>.onrender.com
+      - { key: ADMIN_URL, sync: false }      # same as WEB_URL
+      - { key: API_URL, sync: false }        # WEB_URL + /api
+      - { key: CHECKOUT_URL, sync: false }   # WEB_URL + /pay
+      - { key: BOOTSTRAP_ADMIN_EMAIL, sync: false }
+      - { key: BOOTSTRAP_ADMIN_PASSWORD, sync: false }
+      - { key: EMAIL_PROVIDER, value: console }
+databases:
+  - name: nairaflow-db
+    plan: free
+    databaseName: payments
+    user: app
