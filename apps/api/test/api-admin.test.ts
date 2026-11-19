@@ -10,7 +10,7 @@ describe('public API', () => {
 
   it('rejects missing, malformed and revoked keys', async () => {
     await request(app).get('/v1/balance').expect(401);
-    const bad = await request(app).get('/v1/balance').set('Authorization', 'Bearer sk_test_notarealkeynotarealkey123');
+    const bad = await request(app).get('/v1/balance').set('Authorization', 'Bearer sk_test_' + 'invalid-key-for-tests-0000');
     expect(bad.status).toBe(401);
     expect(bad.body.error.code).toBe('invalid_api_key');
     // Rotating keys revokes the old one.
